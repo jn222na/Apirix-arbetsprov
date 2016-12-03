@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "754399534367",
+    "firebase_url": "https://joakimnilssonapirixarbetsprov.firebaseio.com",
+    "project_id": "joakimnilssonapirixarbetsprov",
+    "storage_bucket": "joakimnilssonapirixarbetsprov.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:754399534367:android:6b26a6e9ae916aae",
+        "android_client_info": {
+          "package_name": "com.example.jocke.joakim_nilsson_apirix_arbetsprov"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "754399534367-9ef5l5kssffl8gu4f7l4r3mgi0drqv3h.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.jocke.joakim_nilsson_apirix_arbetsprov",
+            "certificate_hash": "5C3AC1F1679DF1581336300FC2607D87FB6DBEDC"
+          }
+        },
+        {
+          "client_id": "754399534367-30ncnu1pu39vbghcmvrjr40m7so7mn06.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCMkVfbKyrbHJRRADumpMECU9pk22zU6bE"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "754399534367-30ncnu1pu39vbghcmvrjr40m7so7mn06.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

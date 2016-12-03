@@ -1,0 +1,34 @@
+<resources>
+    <string name="app_name">Joakim Nilsson Arbetsprov</string>
+    <string name="distanceWalkedInfo">Distance walked</string>
+    <string name="distanceWalked"></string>
+    <string name="defaultSpinnerText">Distance to be notified</string>
+
+    <string name="quarterWalk">Buzzing every 25m</string>
+    <string name="halfWalk">Buzzing every 50m</string>
+    <string name="threeQuarterWalk">Buzzing every 75m</string>
+    <string name="fullWalk">Buzzing every 100m</string>
+
+    <string name="btnDeactivate">Measuring</string>
+    <string name="btnActivate">Start</string>
+
+    
+    <string name="FCM_PREF">com.example.jocke.joakim_nilsson_apirix_arbetsprov.fcm.pref</string>
+    <string name="FCM_TOKEN">com.example.jocke.joakim_nilsson_apirix_arbetsprov.fcm.token</string>
+
+    <string name="toolbarTitle">Toolbar Title</string>
+    <string name="notificationMessage">Enter Message</string>
+    <string name="notificationTitle">Enter Title</string>
+    <string name="Startmeasuring">Start</string>
+    <string name="registerPhone">Register Phone</string>
+    <string name="pushnotifications">Register phone in order to receive push messages from external sources.</string>
+    <string name="sendNotification">Send push notification</string>
+    <string name="registerDeviceInfo">Registering your device will allow push messages from external sources.</string>
+
+    <string-array name="distanceToWalk">
+        <item>@string/quarterWalk</item>
+        <item>@string/halfWalk</item>
+        <item>@string/threeQuarterWalk</item>
+        <item>@string/fullWalk</item>
+    </string-array>
+</resources>
