@@ -124,7 +124,7 @@ class MyLocationHandler {
         }
         this.distanceToWalk = distanceToWalk;
 
-        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, scanInterval, distanceToWalk, locationListener);
+        locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, scanInterval, 0, locationListener);
     }
 
     void removeListener() {

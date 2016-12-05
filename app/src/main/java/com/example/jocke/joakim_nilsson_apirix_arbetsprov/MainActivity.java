@@ -28,13 +28,12 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 
-import org.json.JSONObject;
-
 import java.util.HashMap;
 import java.util.Map;
-import java.util.concurrent.ExecutionException;
 
-import database.DbConnection;
+import database.RegisterDevice;
+import database.SendCoordinates;
+import database.SendPushMessage;
 
 import static android.os.Build.VERSION_CODES.M;
 
@@ -51,7 +50,6 @@ public class MainActivity extends AppCompatActivity {
     private LocationManager locationManager = null;
     private LocationListener locationListener = null;
     private MyLocationHandler myLocationHandler = null;
-    private DbConnection dbConnection = null;
 
     private ImageButton imgInfoBtn = null;
     private Button controlBtn = null;
@@ -69,8 +67,8 @@ public class MainActivity extends AppCompatActivity {
     private int scanInterval = 100;
     private int scanAfterDistanceWalked = 0;
 
-    static EditText editTextTitle;
-    static EditText editTextMessage;
+    private EditText editTextTitle;
+    private EditText editTextMessage;
 
     private TextView walkedView = null;
     private double[] startCoordinates = null;
@@ -110,22 +108,23 @@ public class MainActivity extends AppCompatActivity {
     public void setAndRegisterToken(String token) {
         if(token != null) {this.token = token;}
         else {initializePreferences();}
-        DbConnection sendInformationToDb = new DbConnection("http://jockepocke.se/Android_Apirix_arbetsprov/HandleDb.php", "3", token);
+        RegisterDevice sendInformationToDb = new RegisterDevice("http://jockepocke.se/Android_Apirix_arbetsprov/HandleDb.php", "3", token);
+        sendInformationToDb.registerDevice();
         sendInformationToDb.execute();
     }
-    private void registerToken() {
-        dbConnection = new DbConnection(handleDBURL, "3", token);
-        JSONObject getInformationFromDb = null;
-        try {
-            getInformationFromDb = dbConnection.execute().get();
-            if(getInformationFromDb != null) {
-                makeToast("Your device have already been registered");
-                removeRegisterBtn();
-            }
-        } catch (InterruptedException | ExecutionException e) {
-            e.printStackTrace();
-        }
-    }
+//    private void registerToken() {
+//        RegisterDevice dbConnection = new RegisterDevice(handleDBURL, "3", token);
+//        JSONObject RegisterDevice = null;
+//        try {
+//            getInformationFromDb = dbConnection.execute().get();
+//            if(getInformationFromDb != null) {
+//                makeToast("Your device have already been registered");
+//                removeRegisterBtn();
+//            }
+//        } catch (InterruptedException | ExecutionException e) {
+//            e.printStackTrace();
+//        }
+//    }
 
     //If the device token has already been generated remove that button
     private void removeRegisterBtn() {
@@ -177,7 +176,8 @@ public class MainActivity extends AppCompatActivity {
         myLocationHandler.removeListener();
     }
     public void sendCoordinatesToDb(){
-        DbConnection sendInformationToDb = new DbConnection(handleDBURL, "2", token, startCoordinates[0], startCoordinates[1], endCoordinates[0], endCoordinates[1]);
+        SendCoordinates sendInformationToDb = new SendCoordinates(handleDBURL, "2", token, startCoordinates[0], startCoordinates[1], endCoordinates[0], endCoordinates[1]);
+        sendInformationToDb.sendCoordinates();
         sendInformationToDb.execute();
     }
     //Fetch already generated token
@@ -196,8 +196,11 @@ public class MainActivity extends AppCompatActivity {
 //    }
 
     public void sendNotification(View view) {
-        dbConnection = new DbConnection(handleDBURL, "4", token);
-        dbConnection.execute();
+        String title =  editTextTitle.getText().toString();
+        String message = editTextMessage.getText().toString();
+        SendPushMessage pushMessage = new SendPushMessage(handleDBURL, "4", token,title,message);
+        pushMessage.sendPushMessage();
+        pushMessage.execute();
     }
 
     private void stringRequest() {
@@ -250,12 +253,6 @@ public class MainActivity extends AppCompatActivity {
 
     private void makeToast(String string) {
         Toast.makeText(this, string, Toast.LENGTH_SHORT).show();
-    }
-    public static String getTitleText() {
-        return editTextTitle.getText().toString();
-    }
-    public static String getMessageText() {
-        return editTextMessage.getText().toString();
     }
 
     public void setDistanceToWalk(int distanceToWalk) {

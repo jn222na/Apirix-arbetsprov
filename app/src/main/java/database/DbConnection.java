@@ -59,7 +59,7 @@ public class DbConnection extends AsyncTask<Object, Object, JSONObject> {
             case "1":
                 retrievedInformation = sendPushMessage();
                 break;
-        //In use
+            //In use
             case "2":
                 retrievedInformation = sendCoordinates();
                 break;
@@ -69,7 +69,7 @@ public class DbConnection extends AsyncTask<Object, Object, JSONObject> {
             case "4":
                 retrievedInformation = sendPushMessage();
                 break;
-        //In Use ^^^^^
+            //In Use ^^^^^
             case "5":
                 retrievedInformation = registerDevice();
                 break;
@@ -165,7 +165,7 @@ public class DbConnection extends AsyncTask<Object, Object, JSONObject> {
     }
     private JSONObject sendCoordinates() {
 
-         String time = getTime();
+        String time = getTime();
         try {
             response.put("action", this.action);
             response.put("time", time);
