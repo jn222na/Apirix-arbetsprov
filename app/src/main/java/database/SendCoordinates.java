@@ -9,8 +9,8 @@ import org.json.JSONObject;
 
 public class SendCoordinates extends DatabaseConnection {
 
-    public SendCoordinates(String Url, String action, String token, double startLatitude, double startLongitude, double endLatitude, double endLogitude) {
-        super(Url, action, token, startLatitude, startLongitude, endLatitude, endLogitude);
+    public SendCoordinates(int action, String token, double startLatitude, double startLongitude, double endLatitude, double endLogitude) {
+        super(action, token, startLatitude, startLongitude, endLatitude, endLogitude);
     }
 
     public JSONObject sendCoordinates() {

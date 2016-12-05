@@ -27,8 +27,8 @@ public abstract class DatabaseConnection extends AsyncTask<Object, Object, JSONO
 
     String messageBody;
     String title;
-    String URL;
-    String action;
+    private String URL = "http://jockepocke.se/Android_Apirix_arbetsprov/HandleDb.php";
+    int action;
     String token;
     double startLatitude;
     double startLongitude;
@@ -38,22 +38,19 @@ public abstract class DatabaseConnection extends AsyncTask<Object, Object, JSONO
     private String message;
     private JSONObject jsonMessage;
 
-    DatabaseConnection(String URL, String action, String token) {
-        this.URL = URL;
+    DatabaseConnection( int action, String token) {
         this.action = action;
         this.token = token;
     }
 
-    DatabaseConnection(String URL, String action, String token, String title, String message) {
-        this.URL = URL;
+    DatabaseConnection( int action, String token, String title, String message) {
         this.action = action;
         this.token = token;
         this.title = title;
         this.messageBody = message;
     }
 
-    DatabaseConnection(String URL, String action, String token, double startLatitude, double startLongitude, double endLatitude, double endLongitude) {
-        this.URL = URL;
+    DatabaseConnection(int action, String token, double startLatitude, double startLongitude, double endLatitude, double endLongitude) {
         this.action = action;
         this.startLongitude = startLatitude;
         this.startLatitude = startLongitude;
@@ -129,7 +126,7 @@ public abstract class DatabaseConnection extends AsyncTask<Object, Object, JSONO
             conn.disconnect();
 
         }
-        Log.d("doInBackground", "doInBackgrounddoInBackground: " + jsonObject);
+
         return jsonObject;
     }
 

@@ -9,8 +9,8 @@ import org.json.JSONObject;
 
 public class RegisterDevice extends DatabaseConnection {
 
-    public RegisterDevice(String Url, String action, String token) {
-        super(Url, action, token);
+    public RegisterDevice(int action, String token) {
+        super(action, token);
 
     }
 

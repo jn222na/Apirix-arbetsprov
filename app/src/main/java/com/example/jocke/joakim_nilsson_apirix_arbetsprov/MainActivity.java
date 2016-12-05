@@ -22,14 +22,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.android.volley.AuthFailureError;
-import com.android.volley.Request;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.StringRequest;
-
-import java.util.HashMap;
-import java.util.Map;
+import com.example.jocke.joakim_nilsson_apirix_arbetsprov.Firebase.DatabaseStrings;
 
 import database.RegisterDevice;
 import database.SendCoordinates;
@@ -59,8 +52,6 @@ public class MainActivity extends AppCompatActivity {
     private String token = null;
     private String title = null;
     private String message = null;
-    private String insertToDbURL = "http://jockepocke.se/Android_Apirix_arbetsprov/Firebase/fcm_insert.php";
-    private String handleDBURL = "http://jockepocke.se/Android_Apirix_arbetsprov/HandleDb.php";
     private int distanceToWalk = 0;
     private SpinnerDistance spinnerDistance = null;
     private Spinner spinner = null;
@@ -106,34 +97,29 @@ public class MainActivity extends AppCompatActivity {
 
     //Save the FCM generated token to db
     public void setAndRegisterToken(String token) {
-        if(token != null) {this.token = token;}
-        else {initializePreferences();}
-        RegisterDevice sendInformationToDb = new RegisterDevice("http://jockepocke.se/Android_Apirix_arbetsprov/HandleDb.php", "3", token);
+        if(token != null) {
+            this.token = token;
+        } else {
+            initializePreferences();
+        }
+        RegisterDevice sendInformationToDb = new RegisterDevice(DatabaseStrings.REGISTER.getValue(), token);
         sendInformationToDb.registerDevice();
         sendInformationToDb.execute();
     }
-//    private void registerToken() {
-//        RegisterDevice dbConnection = new RegisterDevice(handleDBURL, "3", token);
-//        JSONObject RegisterDevice = null;
-//        try {
-//            getInformationFromDb = dbConnection.execute().get();
-//            if(getInformationFromDb != null) {
-//                makeToast("Your device have already been registered");
-//                removeRegisterBtn();
-//            }
-//        } catch (InterruptedException | ExecutionException e) {
-//            e.printStackTrace();
-//        }
-//    }
 
-    //If the device token has already been generated remove that button
-    private void removeRegisterBtn() {
-//        View bView = sendNotification;
-//        bView.setVisibility(View.GONE);
-//        bView = imgInfoBtn;
-//        bView.setVisibility(View.GONE);
+    public void sendCoordinatesToDb() {
+        SendCoordinates sendInformationToDb = new SendCoordinates(DatabaseStrings.SENDCOORDINATES.getValue(), token, startCoordinates[0], startCoordinates[1], endCoordinates[0], endCoordinates[1]);
+        sendInformationToDb.sendCoordinates();
+        sendInformationToDb.execute();
     }
 
+    public void sendNotification(View view) {
+        String title = editTextTitle.getText().toString();
+        String message = editTextMessage.getText().toString();
+        SendPushMessage pushMessage = new SendPushMessage(DatabaseStrings.PUSHMESSAGE.getValue(), token, title, message);
+        pushMessage.sendPushMessage();
+        pushMessage.execute();
+    }
 
     @TargetApi(M)
     private boolean askForPermissions() {
@@ -154,7 +140,8 @@ public class MainActivity extends AppCompatActivity {
     public void startCoordinates(double[] coordinates) {
         this.startCoordinates = coordinates;
     }
-    public void endCoordinates(double[] coordinates){
+
+    public void endCoordinates(double[] coordinates) {
         this.endCoordinates = coordinates;
     }
 
@@ -175,11 +162,7 @@ public class MainActivity extends AppCompatActivity {
         sendPushNotification.setEnabled(true);
         myLocationHandler.removeListener();
     }
-    public void sendCoordinatesToDb(){
-        SendCoordinates sendInformationToDb = new SendCoordinates(handleDBURL, "2", token, startCoordinates[0], startCoordinates[1], endCoordinates[0], endCoordinates[1]);
-        sendInformationToDb.sendCoordinates();
-        sendInformationToDb.execute();
-    }
+
     //Fetch already generated token
     public void initializePreferences() {
         SharedPreferences sharedPreferences = getApplicationContext().getSharedPreferences(getString(R.string.FCM_PREF), Context.MODE_PRIVATE);
@@ -195,38 +178,8 @@ public class MainActivity extends AppCompatActivity {
 //        makeToast("Device registered");
 //    }
 
-    public void sendNotification(View view) {
-        String title =  editTextTitle.getText().toString();
-        String message = editTextMessage.getText().toString();
-        SendPushMessage pushMessage = new SendPushMessage(handleDBURL, "4", token,title,message);
-        pushMessage.sendPushMessage();
-        pushMessage.execute();
-    }
 
-    private void stringRequest() {
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, handleDBURL,
-                new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-
-                    }
-                }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-
-            }
-        }) {
-            @Override
-            protected Map<String, String> getParams() throws AuthFailureError {
-                Map<String, String> params = new HashMap<>();
-                params.put("fcm_token", token);
-                return params;
-            }
-        };
-        MySingelton.getmInstance(MainActivity.this).addToRequestQue(stringRequest);
-        removeRegisterBtn();
-    }
-
+    //Info window
     public void displayPopupWindow(View view) {
         PopupWindow popup = new PopupWindow(MainActivity.this);
         View layout = getLayoutInflater().inflate(R.layout.popup_content, null);
@@ -243,7 +196,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
-    public void onBackPressed(){
+    public void onBackPressed() {
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putString("walkedDistance", walkedView.getText().toString());
@@ -257,5 +210,28 @@ public class MainActivity extends AppCompatActivity {
 
     public void setDistanceToWalk(int distanceToWalk) {
         this.distanceToWalk = distanceToWalk;
+    }
+
+
+    //    private void registerToken() {
+//        RegisterDevice dbConnection = new RegisterDevice(handleDBURL, "3", token);
+//        JSONObject RegisterDevice = null;
+//        try {
+//            getInformationFromDb = dbConnection.execute().get();
+//            if(getInformationFromDb != null) {
+//                makeToast("Your device have already been registered");
+//                removeRegisterBtn();
+//            }
+//        } catch (InterruptedException | ExecutionException e) {
+//            e.printStackTrace();
+//        }
+//    }
+
+    //If the device token has already been generated remove that button
+    private void removeRegisterBtn() {
+//        View bView = sendNotification;
+//        bView.setVisibility(View.GONE);
+//        bView = imgInfoBtn;
+//        bView.setVisibility(View.GONE);
     }
 }

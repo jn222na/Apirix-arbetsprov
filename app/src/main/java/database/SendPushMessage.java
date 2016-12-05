@@ -9,8 +9,8 @@ import org.json.JSONObject;
 
 public class SendPushMessage extends DatabaseConnection {
 
-    public SendPushMessage(String Url, String action, String token, String title, String message) {
-        super(Url, action, token, title, message);
+    public SendPushMessage(int action, String token, String title, String message) {
+        super(action, token, title, message);
     }
 
     public JSONObject sendPushMessage() {
