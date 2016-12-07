@@ -33,7 +33,7 @@ import static android.os.Build.VERSION_CODES.M;
 
 //TODO: REQUESTPERMISSION OVERRIDE
 //TODO: SHAREDPREFERENCES TOTALDISTANCEWALKED
-//TODO: START/ENDCOORDINATES
+//TODO: ENDCOORDINATES
 
 public class MainActivity extends AppCompatActivity {
 
@@ -50,8 +50,6 @@ public class MainActivity extends AppCompatActivity {
     private Button sendPushNotification = null;
 
     private String token = null;
-    private String title = null;
-    private String message = null;
     private int distanceToWalk = 0;
     private SpinnerDistance spinnerDistance = null;
     private Spinner spinner = null;
@@ -62,14 +60,22 @@ public class MainActivity extends AppCompatActivity {
     private EditText editTextMessage;
 
     private TextView walkedView = null;
-    private double[] startCoordinates = null;
-    private double[] endCoordinates = null;
+    private double[] startCoords;
+    private double[] endCoords;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+        initializeXmls();
+
+        myLocationHandler.setupLocationListener();
+        askForPermissions();
+        distanceWalkedPrefs();
+    }
+
+    private void initializeXmls() {
         controlBtn = (Button) findViewById(R.id.controlBtn);
         imgInfoBtn = (ImageButton) findViewById(R.id.imgInfoBtn);
         spinner = (Spinner) findViewById(R.id.spinnerSelectedDistance);
@@ -83,12 +89,22 @@ public class MainActivity extends AppCompatActivity {
         locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
         spinnerDistance = new SpinnerDistance(this, scanAfterDistanceWalked);
         myLocationHandler = new MyLocationHandler(this, locationListener);
-
-        myLocationHandler.setupLocationListener();
-        askForPermissions();
-        distanceWalkedPrefs();
     }
 
+    @TargetApi(M)
+    private boolean askForPermissions() {
+        try {
+            requestPermissions(new String[]{
+                            Manifest.permission.ACCESS_COARSE_LOCATION,
+                            Manifest.permission.ACCESS_FINE_LOCATION},
+                    LOCATION_REQUEST);
+        } catch (Exception e) {
+            Log.d("askForPermissions", "ERROR" + e);
+            return false;
+        }
+
+        return true;
+    }
 
     private void distanceWalkedPrefs() {
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
@@ -108,7 +124,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void sendCoordinatesToDb() {
-        SendCoordinates sendInformationToDb = new SendCoordinates(DatabaseStrings.SENDCOORDINATES.getValue(), token, startCoordinates[0], startCoordinates[1], endCoordinates[0], endCoordinates[1]);
+        SendCoordinates sendInformationToDb = new SendCoordinates(DatabaseStrings.SENDCOORDINATES.getValue(), token, startCoords[0], startCoords[1], endCoords[0], endCoords[1]);
         sendInformationToDb.sendCoordinates();
         sendInformationToDb.execute();
     }
@@ -121,28 +137,14 @@ public class MainActivity extends AppCompatActivity {
         pushMessage.execute();
     }
 
-    @TargetApi(M)
-    private boolean askForPermissions() {
-        try {
-            requestPermissions(new String[]{
-                            Manifest.permission.ACCESS_COARSE_LOCATION,
-                            Manifest.permission.ACCESS_FINE_LOCATION},
-                    LOCATION_REQUEST);
-        } catch (Exception e) {
-            Log.d("askForPermissions", "ERROR" + e);
-            return false;
-        }
-
-        return true;
-    }
 
     //Gets the initial coordinates
     public void startCoordinates(double[] coordinates) {
-        this.startCoordinates = coordinates;
+        this.startCoords = coordinates;
     }
 
     public void endCoordinates(double[] coordinates) {
-        this.endCoordinates = coordinates;
+        this.endCoords = coordinates;
     }
 
     //Start monitoring user coordinates
@@ -172,13 +174,6 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    //RegisterBtn
-//    public void registerPhone(View view) {
-//        stringRequest();
-//        makeToast("Device registered");
-//    }
-
-
     //Info window
     public void displayPopupWindow(View view) {
         PopupWindow popup = new PopupWindow(MainActivity.this);
@@ -190,9 +185,11 @@ public class MainActivity extends AppCompatActivity {
         // Closes the popup window when touch outside of it - when looses focus
         popup.setOutsideTouchable(true);
         popup.setFocusable(true);
+
         // Show anchored to button
         popup.setBackgroundDrawable(new BitmapDrawable());
         popup.showAsDropDown(view);
+
     }
 
     @Override
@@ -213,6 +210,12 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
+    //RegisterBtn
+//    public void registerPhone(View view) {
+//        stringRequest();
+//        makeToast("Device registered");
+//    }
+
     //    private void registerToken() {
 //        RegisterDevice dbConnection = new RegisterDevice(handleDBURL, "3", token);
 //        JSONObject RegisterDevice = null;
@@ -226,12 +229,11 @@ public class MainActivity extends AppCompatActivity {
 //            e.printStackTrace();
 //        }
 //    }
-
     //If the device token has already been generated remove that button
-    private void removeRegisterBtn() {
+//    private void removeRegisterBtn() {
 //        View bView = sendNotification;
 //        bView.setVisibility(View.GONE);
 //        bView = imgInfoBtn;
 //        bView.setVisibility(View.GONE);
-    }
+//}
 }

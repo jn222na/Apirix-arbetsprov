@@ -15,8 +15,6 @@ import android.os.Vibrator;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
-import android.widget.Button;
-import android.widget.ImageButton;
 import android.widget.TextView;
 
 /**
@@ -28,11 +26,9 @@ class MyLocationHandler {
     private LocationManager locationManager = null;
     private Vibrator vibrator = null;
     private TextView walkedView = null;
-    private Button controlBtn = null;
     private LocationListener locationListener = null;
     private int totalDistanceWalked = 0;
     private MainActivity mainActivity = null;
-    private ImageButton imgInfoBtn = null;
     private int i = 0;
     private int distanceToWalk;
 
@@ -41,8 +37,6 @@ class MyLocationHandler {
         this.locationListener = locationListener;
         this.mainActivity = mainActivity;
         walkedView = (TextView) mainActivity.findViewById(R.id.distanceWalked);
-        controlBtn = (Button) mainActivity.findViewById(R.id.controlBtn);
-        imgInfoBtn = (ImageButton) mainActivity.findViewById(R.id.imgInfoBtn);
         locationManager = (LocationManager) mainActivity.getSystemService(Context.LOCATION_SERVICE);
     }
 
@@ -58,7 +52,6 @@ class MyLocationHandler {
                     coordinates[0] = location.getLatitude();
                     coordinates[1] = location.getLongitude();
                     mainActivity.startCoordinates(coordinates);
-
                     if(i == 1) {
                         // Called when a new location is found by the network location provider.
                         vibrator = (Vibrator) mainActivity.getSystemService(Context.VIBRATOR_SERVICE);
@@ -77,14 +70,11 @@ class MyLocationHandler {
                     i++;
                 }
 
-                public void onStatusChanged(String provider, int status, Bundle extras) {
-                }
+                public void onStatusChanged(String provider, int status, Bundle extras) {}
 
-                public void onProviderEnabled(String provider) {
-                }
+                public void onProviderEnabled(String provider) {}
 
-                public void onProviderDisabled(String provider) {
-                }
+                public void onProviderDisabled(String provider) {}
 
             };
 
@@ -103,7 +93,7 @@ class MyLocationHandler {
                 new NotificationCompat.Builder(mainActivity)
                         .setSmallIcon(R.drawable.apirix_logo)
                         .setColor(Color.GREEN)
-                        .setLights(Color.BLUE, 3000, 3000)
+                        .setLights(Color.parseColor("#28ca2b"), 1000, 2000)
                         .setContentTitle(distanceToWalk + "m Walked")
                         .setContentIntent(pendingIntent)
                         .setContentText("Total Distance Walked " + totalDistanceWalked + "m");
@@ -113,30 +103,14 @@ class MyLocationHandler {
 
     void requestListener(int scanInterval, int distanceToWalk) {
         if(ActivityCompat.checkSelfPermission(mainActivity, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(mainActivity, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            // TODO: Consider calling
-            //    ActivityCompat#requestPermissions
-            // here to request the missing permissions, and then overriding
-            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-            //                                          int[] grantResults)
-            // to handle the case where the user grants the permission. See the documentation
-            // for ActivityCompat#requestPermissions for more details.
             return;
         }
         this.distanceToWalk = distanceToWalk;
-
-        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, scanInterval, 0, locationListener);
+        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, scanInterval, distanceToWalk, locationListener);
     }
 
     void removeListener() {
         if(ActivityCompat.checkSelfPermission(mainActivity, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(mainActivity, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            // TODO: Consider calling
-            //    ActivityCompat#requestPermissions
-            // here to request the missing permissions, and then overriding
-            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-            //                                          int[] grantResults)
-            // to handle the case where the user grants the permission. See the documentation
-            // for ActivityCompat#requestPermissions for more details.
-
             return;
         }
         locationManager.removeUpdates(locationListener);

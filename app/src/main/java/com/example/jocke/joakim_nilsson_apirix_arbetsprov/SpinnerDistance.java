@@ -26,7 +26,6 @@ class SpinnerDistance {
         this.mainactivity  = mainActivity;
         this.distanceToWalk = distanceToWalk;
         setupSpinner();
-
     }
 
     private void setupSpinner() {
@@ -54,7 +53,7 @@ class SpinnerDistance {
             dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
             spinnerSelectDistance.setAdapter(dataAdapter);
         } catch (Exception e) {
-            Log.e("SetupSpinner->Adapter", "ERROR", e);
+            Log.d("SetupSpinner->Adapter", "ERROR", e);
         }
 
         try {
@@ -83,7 +82,7 @@ class SpinnerDistance {
                 }
             });
         } catch (Exception e) {
-            Log.e("SetupSpinner->Listener", "ERROR", e);
+            Log.d("SetupSpinner->Listener", "ERROR", e);
         }
     }
 }

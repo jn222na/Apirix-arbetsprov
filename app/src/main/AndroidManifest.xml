@@ -23,7 +23,7 @@
         </service>
         <service
             android:permission="android.permission.INTERNET"
-            android:name=".Firebase.FirebaseMessaageService">
+            android:name=".Firebase.FirebaseMessageService">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT"/>
             </intent-filter>

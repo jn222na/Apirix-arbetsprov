@@ -23,7 +23,8 @@
     <string name="registerPhone">Register Phone</string>
     <string name="pushnotifications">Register phone in order to receive push messages from external sources.</string>
     <string name="sendNotification">Send push notification</string>
-    <string name="registerDeviceInfo">Registering your device will allow push messages from external sources.</string>
+    <string name="registerDeviceInfo">(Registering your device will allow push messages from external sources.)
+        \nIn this Version this happens automatically when the application run for the first time</string>
 
     <string-array name="distanceToWalk">
         <item>@string/quarterWalk</item>

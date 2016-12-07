@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/Joakim_Nilsson_Apirix_Arbetsprov.iml" filepath="$PROJECT_DIR$/Joakim_Nilsson_Apirix_Arbetsprov.iml" />
+      <module fileurl="file://$PROJECT_DIR$/apirix.iml" filepath="$PROJECT_DIR$/apirix.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
     </modules>
   </component>
